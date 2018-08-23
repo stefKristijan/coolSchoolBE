@@ -4,8 +4,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "user_education")
-public class UserEducation implements Serializable {
+@Table(name = "user_school")
+public class UserSchool implements Serializable {
 
     @Id
     @ManyToOne
@@ -14,25 +14,25 @@ public class UserEducation implements Serializable {
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "education_id")
-    private EducationProgram educationProgram;
+    @JoinColumn(name = "school_id")
+    private School school;
 
     private Integer classNum;
 
-    public UserEducation(User user, EducationProgram educationProgram, Integer classNum) {
+    public UserSchool(User user, School school, Integer classNum) {
         this.user = user;
-        this.educationProgram = educationProgram;
+        this.school = school;
         this.classNum = classNum;
     }
 
-    public UserEducation() {
+    public UserSchool() {
     }
 
     @Override
     public String toString() {
-        return "UserEducation{" +
+        return "UserSchool{" +
                 "user=" + user +
-                ", educationProgram=" + educationProgram +
+                ", school=" + school +
                 ", classNum=" + classNum +
                 '}';
     }
@@ -45,12 +45,12 @@ public class UserEducation implements Serializable {
         this.user = user;
     }
 
-    public EducationProgram getEducationProgram() {
-        return educationProgram;
+    public School getSchool() {
+        return school;
     }
 
-    public void setEducationProgram(EducationProgram educationProgram) {
-        this.educationProgram = educationProgram;
+    public void setSchool(School school) {
+        this.school = school;
     }
 
     public Integer getClassNum() {

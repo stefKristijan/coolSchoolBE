@@ -1,7 +1,6 @@
 package hr.ferit.coolschool.model;
 
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -9,7 +8,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer userId;
+    private Long userId;
 
     @Column(unique = true)
     private String username;
@@ -21,7 +20,7 @@ public class User {
     private Role role;
 
     @OneToMany(mappedBy = "user_id", cascade = CascadeType.ALL)
-    private Set<UserEducation> userEducation;
+    private Set<UserSchool> userSchool;
 
     public User(String username, String password, String email, String dob, String firstName, String lastName, Role role) {
         this.username = username;
@@ -46,7 +45,7 @@ public class User {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", role=" + role +
-                ", userEducation=" + userEducation +
+                ", userSchool=" + userSchool +
                 '}';
     }
 
@@ -80,19 +79,19 @@ public class User {
         return result;
     }
 
-    public Set<UserEducation> getUserEducation() {
-        return userEducation;
+    public Set<UserSchool> getUserSchool() {
+        return userSchool;
     }
 
-    public void setUserEducation(Set<UserEducation> userEducation) {
-        this.userEducation = userEducation;
+    public void setUserSchool(Set<UserSchool> userSchool) {
+        this.userSchool = userSchool;
     }
 
-    public Integer getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
