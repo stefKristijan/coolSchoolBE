@@ -1,12 +1,10 @@
 package hr.ferit.coolschool.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.Set;
 
 @Entity
+@Table(name = "schools")
 public class School {
 
     @Id
@@ -18,7 +16,8 @@ public class School {
     private String state;
     private Integer postalCode;
     private SchoolType type;
-    @OneToMany(mappedBy = "school_id")
+
+    @OneToMany(mappedBy = "school")
     private Set<UserSchool> userSchools;
 
     public School(String name, String address, String city, String state, Integer postalCode, SchoolType type, Set<UserSchool> userSchools) {

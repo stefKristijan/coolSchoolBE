@@ -1,9 +1,11 @@
 package hr.ferit.coolschool.model;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.Set;
 
 @Entity
+@Table(name = "users")
 public class User {
 
     @Id
@@ -14,15 +16,18 @@ public class User {
     private String username;
     private String password;
     private String email;
-    private String dob;
+    private Date dob;
     private String firstName;
     private String lastName;
     private Role role;
 
-    @OneToMany(mappedBy = "user_id", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.ALL})
     private Set<UserSchool> userSchool;
 
-    public User(String username, String password, String email, String dob, String firstName, String lastName, Role role) {
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.ALL})
+    private Set<QuizParticipant> participants;
+
+    public User(String username, String password, String email, Date dob, String firstName, String lastName, Role role) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -46,6 +51,7 @@ public class User {
                 ", lastName='" + lastName + '\'' +
                 ", role=" + role +
                 ", userSchool=" + userSchool +
+                ", participants=" + participants +
                 '}';
     }
 
@@ -77,6 +83,14 @@ public class User {
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
         result = 31 * result + role.hashCode();
         return result;
+    }
+
+    public Set<QuizParticipant> getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(Set<QuizParticipant> participants) {
+        this.participants = participants;
     }
 
     public Set<UserSchool> getUserSchool() {
@@ -119,11 +133,11 @@ public class User {
         this.email = email;
     }
 
-    public String getDob() {
+    public Date getDob() {
         return dob;
     }
 
-    public void setDob(String dob) {
+    public void setDob(Date dob) {
         this.dob = dob;
     }
 
