@@ -1,6 +1,8 @@
 package hr.ferit.coolschool.model;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class User {
@@ -17,6 +19,9 @@ public class User {
     private String firstName;
     private String lastName;
     private Role role;
+
+    @OneToMany(mappedBy = "user_id", cascade = CascadeType.ALL)
+    private Set<UserEducation> userEducation;
 
     public User(String username, String password, String email, String dob, String firstName, String lastName, Role role) {
         this.username = username;
@@ -41,6 +46,7 @@ public class User {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", role=" + role +
+                ", userEducation=" + userEducation +
                 '}';
     }
 
@@ -72,6 +78,14 @@ public class User {
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
         result = 31 * result + role.hashCode();
         return result;
+    }
+
+    public Set<UserEducation> getUserEducation() {
+        return userEducation;
+    }
+
+    public void setUserEducation(Set<UserEducation> userEducation) {
+        this.userEducation = userEducation;
     }
 
     public Integer getUserId() {
