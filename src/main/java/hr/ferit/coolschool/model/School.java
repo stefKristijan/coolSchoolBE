@@ -8,7 +8,7 @@ import java.util.Set;
 public class School {
 
     @Id
-    @GeneratedValue
+   @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer schoolId;
     private String name;
     private String address;

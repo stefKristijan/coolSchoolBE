@@ -11,7 +11,7 @@ import java.util.Set;
 public class Quiz {
 
     @Id
-    @GeneratedValue
+   @GeneratedValue(strategy = GenerationType.AUTO)
     private Long quizId;
     private LocalDateTime creationTime;
     private LocalDateTime startTime;

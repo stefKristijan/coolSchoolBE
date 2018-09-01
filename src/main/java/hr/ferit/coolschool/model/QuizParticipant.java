@@ -8,7 +8,7 @@ import java.util.Set;
 public class QuizParticipant {
 
     @Id
-    @GeneratedValue
+   @GeneratedValue(strategy = GenerationType.AUTO)
     private Long participantId;
     private Float sumPoints;
     //time in seconds
