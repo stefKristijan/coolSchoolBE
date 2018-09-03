@@ -1,6 +1,14 @@
 package hr.ferit.coolschool.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.Date;
 import java.util.Set;
 
@@ -13,11 +21,25 @@ public class User {
     private Long userId;
 
     @Column(unique = true)
+    @NotNull(message = "Unesite korisničko ime")
+    @NotBlank(message = "Unesite korisničko ime")
+    @Pattern(regexp = "^[A-Za-z0-9]+(?:[_-][A-Za-z0-9]+)*$",
+            message = "Unesite ispravno korisničko ime")
     private String username;
+    //    @NotBlank(message = "Unesite zaporku")
+    //    @NotNull(message = "Unesite zaporku")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
+    @Email(message = "Unesite e-mail adresu pravilnog formata")
+    @NotNull(message = "Unesite e-mail adresu")
     private String email;
+    @DateTimeFormat(pattern = "dd.MM.yyyy.")
     private Date dob;
+    @NotBlank(message = "Unesite vaše ime")
+    @NotNull(message = "Unesite vaše ime")
     private String firstName;
+    @NotBlank(message = "Unesite vaše ime")
+    @NotNull(message = "Unesite vaše ime")
     private String lastName;
     private Role role;
 
@@ -25,6 +47,7 @@ public class User {
     private Set<UserSchool> userSchool;
 
     @OneToMany(mappedBy = "user", cascade = {CascadeType.ALL})
+    @JsonIgnore
     private Set<QuizParticipant> participants;
 
     public User(String username, String password, String email, Date dob, String firstName, String lastName, Role role) {
