@@ -24,6 +24,11 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    @GetMapping("")
+    public ResponseEntity<?> listUsers(){
+        return ResponseEntity.ok(this.userRepository.findAll());
+    }
+
     @PostMapping("registration")
     public ResponseEntity<User> registerUser(
             @RequestBody @Valid User user
