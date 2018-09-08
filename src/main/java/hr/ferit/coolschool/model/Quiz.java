@@ -1,13 +1,11 @@
 package hr.ferit.coolschool.model;
 
-import org.apache.tomcat.jni.Local;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
-@Table(name = "quizes")
+@Table(name = "quizzes")
 public class Quiz {
 
     @Id
