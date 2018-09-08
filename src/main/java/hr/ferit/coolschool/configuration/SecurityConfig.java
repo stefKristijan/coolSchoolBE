@@ -50,7 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         // @formatter:off
         http.authorizeRequests()
-                .antMatchers("/login", "/registration").permitAll()
+                .antMatchers("/login", "/api/users/registration").permitAll()
                 .anyRequest().authenticated()
                 .and()
                     .exceptionHandling().accessDeniedHandler(accessDeniedHandler())

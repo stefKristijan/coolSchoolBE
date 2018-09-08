@@ -1,18 +1,24 @@
 package hr.ferit.coolschool.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "user_school")
+@Table(name = "user_school", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"user_id", "school_id"})
+})
 public class UserSchool implements Serializable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long userSchoolId;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Id
     @ManyToOne
     @JoinColumn(name = "school_id")
     private School school;
@@ -31,12 +37,22 @@ public class UserSchool implements Serializable {
     @Override
     public String toString() {
         return "UserSchool{" +
-                "user=" + user +
+                "userSchoolId=" + userSchoolId +
+                ", user=" + user +
                 ", school=" + school +
                 ", classNum=" + classNum +
                 '}';
     }
 
+    public Long getUserSchoolId() {
+        return userSchoolId;
+    }
+
+    public void setUserSchoolId(Long userSchoolId) {
+        this.userSchoolId = userSchoolId;
+    }
+
+    @JsonIgnore
     public User getUser() {
         return user;
     }

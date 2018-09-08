@@ -44,7 +44,7 @@ public class User {
     private Role role;
 
     @OneToMany(mappedBy = "user", cascade = {CascadeType.ALL})
-    private Set<UserSchool> userSchool;
+    private Set<UserSchool> userSchools;
 
     @OneToMany(mappedBy = "user", cascade = {CascadeType.ALL})
     @JsonIgnore
@@ -74,7 +74,7 @@ public class User {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", role=" + role +
-                ", userSchool=" + userSchool +
+                ", userSchools=" + userSchools +
                 ", participants=" + participants +
                 '}';
     }
@@ -117,12 +117,12 @@ public class User {
         this.participants = participants;
     }
 
-    public Set<UserSchool> getUserSchool() {
-        return userSchool;
+    public Set<UserSchool> getUserSchools() {
+        return userSchools;
     }
 
-    public void setUserSchool(Set<UserSchool> userSchool) {
-        this.userSchool = userSchool;
+    public void setUserSchools(Set<UserSchool> userSchools) {
+        this.userSchools = userSchools;
     }
 
     public Long getUserId() {

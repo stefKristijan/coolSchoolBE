@@ -3,7 +3,9 @@ package hr.ferit.coolschool.service;
 import hr.ferit.coolschool.exception.ResourceNotFoundException;
 import hr.ferit.coolschool.exception.UserAlreadyExistsException;
 import hr.ferit.coolschool.model.User;
+import hr.ferit.coolschool.repository.SchoolRepository;
 import hr.ferit.coolschool.repository.UserRepository;
+import hr.ferit.coolschool.repository.UserSchoolRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,6 +28,12 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private UserSchoolRepository userSchoolRepository;
+
+    @Autowired
+    private SchoolRepository schoolRepository;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> user = this.userRepository.findByUsername(username);
@@ -43,9 +51,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public User save(User user) {
         if (!this.userRepository.findByUsername(user.getUsername()).isPresent()) {
-            //TODO - when school Repository is added, check if there are schools in object and add them to DB
             user.setPassword(passwordEncoder.encode(user.getPassword()));
-            return this.userRepository.save(user);
+            User savedUser = this.userRepository.save(user);
+            if (user.getUserSchools().size() > 0) {
+                user.getUserSchools().forEach(
+                        us -> {
+                            us.setUser(savedUser);
+                            us.setSchool(this.schoolRepository.findById(us.getSchool().getSchoolId()).get());
+                            this.userSchoolRepository.save(us);
+                        }
+                );
+            }
+            return this.userRepository.findById(savedUser.getUserId())
+                    .orElseThrow(() -> new RuntimeException("Nešto je pošlo po zlu"));
         }
         throw new UserAlreadyExistsException("Korisnik s odabranim korisničkim imenom već postoji");
     }
@@ -75,7 +93,7 @@ public class UserServiceImpl implements UserService {
 
         if (passwordEncoder.matches(oldPassword, persisted.getPassword())) {
             int updateResult = this.userRepository.updatePassword(id, passwordEncoder.encode(newPassword));
-            if(updateResult>0){
+            if (updateResult > 0) {
                 return true;
             }
             return false;
