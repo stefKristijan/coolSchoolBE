@@ -1,6 +1,14 @@
 package hr.ferit.coolschool.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -9,19 +17,33 @@ import java.util.Set;
 public class Quiz {
 
     @Id
-   @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long quizId;
+    @CreationTimestamp
     private LocalDateTime creationTime;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
-    private Integer classNum;
+    @Min(value = 1, message = "Unesite razred/godinu za koji/u je namijenjen kviz (od 1 do 8)")
+    @Max(value = 9, message = "Unesite razred/godinu za koji/u je namijenjen kviz (od 1 do 8)")
+    private int classNum;
+    @NotNull(message = "Odaberite tip škole na koji se ovaj kviz odnosi")
     private SchoolType schoolType;
+    @NotNull(message = "Odaberite predmet za koji je ovaj kviz napravljen")
     private Subject subject;
+    @NotNull(message = "Unesite maksimalan broj bodova")
+    @Min(value = 10, message = "Minimalan broj bodova za kviz je 10")
+    @Max(value = 100, message = "Maksimalan broj bodova za kviz je 100")
     private Float maxPoints;
+    @Min(value = 0, message = "Odaberite težinu između 0 i 10")
+    @Max(value = 10, message = "Odaberite težinu izemđu 0 i 10")
     private int difficulty;
+    @Column(columnDefinition = "bit(1) DEFAULT 1")
     private boolean enabled;
 
     @OneToMany(mappedBy = "quiz", cascade = {CascadeType.ALL})
+    @NotNull(message = "Unesite pitanja koja će se pojaviti u kvizu")
+    @NotEmpty(message = "Unesite pitanja koja će se pojaviti u kvizu")
+    @Valid
     private Set<Question> questions;
 
     @OneToMany(mappedBy = "quiz", cascade = {CascadeType.ALL})
@@ -73,7 +95,7 @@ public class Quiz {
         if (creationTime != null ? !creationTime.equals(quiz.creationTime) : quiz.creationTime != null) return false;
         if (startTime != null ? !startTime.equals(quiz.startTime) : quiz.startTime != null) return false;
         if (endTime != null ? !endTime.equals(quiz.endTime) : quiz.endTime != null) return false;
-        if (!classNum.equals(quiz.classNum)) return false;
+        if (classNum != quiz.classNum) return false;
         if (schoolType != quiz.schoolType) return false;
         if (subject != quiz.subject) return false;
         return maxPoints.equals(quiz.maxPoints);
@@ -85,7 +107,7 @@ public class Quiz {
         result = 31 * result + (creationTime != null ? creationTime.hashCode() : 0);
         result = 31 * result + (startTime != null ? startTime.hashCode() : 0);
         result = 31 * result + (endTime != null ? endTime.hashCode() : 0);
-        result = 31 * result + classNum.hashCode();
+        result = 31 * result + classNum;
         result = 31 * result + schoolType.hashCode();
         result = 31 * result + subject.hashCode();
         result = 31 * result + maxPoints.hashCode();
@@ -182,6 +204,7 @@ public class Quiz {
         this.questions = questions;
     }
 
+    @JsonIgnore
     public Set<QuizParticipant> getQuizParticipants() {
         return quizParticipants;
     }

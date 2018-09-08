@@ -4,7 +4,6 @@ import hr.ferit.coolschool.model.SchoolType;
 import hr.ferit.coolschool.model.Subject;
 
 public class QuizFilter {
-
     private Integer classNum;
     private SchoolType schoolType;
     private Subject subject;
@@ -20,6 +19,31 @@ public class QuizFilter {
                 ", difficulty=" + difficulty +
                 ", enabled=" + enabled +
                 '}';
+    }
+
+    public QuizFilter byEnabled(Boolean enabled) {
+        this.enabled = enabled;
+        return this;
+    }
+
+    public QuizFilter byClassNum(Integer classNum) {
+        this.classNum = classNum;
+        return this;
+    }
+
+    public QuizFilter bySubject(Subject subject) {
+        this.subject = subject;
+        return this;
+    }
+
+    public QuizFilter bySchoolType(SchoolType schoolType) {
+        this.schoolType = schoolType;
+        return this;
+    }
+
+    public QuizFilter byDifficulty(Integer difficulty) {
+        this.difficulty = difficulty;
+        return this;
     }
 
     public Integer getClassNum() {

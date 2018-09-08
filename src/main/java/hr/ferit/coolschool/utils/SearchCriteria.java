@@ -11,6 +11,26 @@ public class SearchCriteria {
         this.value = value;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SearchCriteria that = (SearchCriteria) o;
+
+        if (!key.equals(that.key)) return false;
+        if (!operation.equals(that.operation)) return false;
+        return value.equals(that.value);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = key.hashCode();
+        result = 31 * result + operation.hashCode();
+        result = 31 * result + value.hashCode();
+        return result;
+    }
+
     public SearchCriteria(String key) {
         this.key = key;
     }

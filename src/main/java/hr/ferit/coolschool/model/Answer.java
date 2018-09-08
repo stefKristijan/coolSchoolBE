@@ -1,6 +1,10 @@
 package hr.ferit.coolschool.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Entity
@@ -8,11 +12,13 @@ import java.util.Set;
 public class Answer {
 
     @Id
-   @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long answerId;
+    @NotNull(message = "Unesite tekst odgovora")
+    @NotBlank(message = "Unesite tekst odgovora")
     private String answer;
-    private boolean correct;
-    private Float points;
+    private boolean correct = false;
+    private Float points = (float) 0;
 
     @ManyToOne
     @JoinColumn(name = "question_id")
@@ -52,17 +58,15 @@ public class Answer {
         Answer answer1 = (Answer) o;
 
         if (correct != answer1.correct) return false;
-        if (!answerId.equals(answer1.answerId)) return false;
         if (!answer.equals(answer1.answer)) return false;
-        return points != null ? points.equals(answer1.points) : answer1.points == null;
+        return points.equals(answer1.points);
     }
 
     @Override
     public int hashCode() {
-        int result = answerId.hashCode();
-        result = 31 * result + answer.hashCode();
+        int result = answer.hashCode();
         result = 31 * result + (correct ? 1 : 0);
-        result = 31 * result + (points != null ? points.hashCode() : 0);
+        result = 31 * result + points.hashCode();
         return result;
     }
 
@@ -110,6 +114,7 @@ public class Answer {
         return question;
     }
 
+    @JsonIgnore
     public void setQuestion(Question question) {
         this.question = question;
     }

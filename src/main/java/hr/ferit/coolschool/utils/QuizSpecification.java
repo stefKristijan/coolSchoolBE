@@ -36,4 +36,6 @@ public class QuizSpecification implements Specification<Quiz> {
         }
         return null;
     }
+
+
 }
