@@ -1,4 +1,7 @@
 package hr.ferit.coolschool.repository;
 
-public interface SchoolRepository {
+import hr.ferit.coolschool.model.School;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface SchoolRepository extends JpaRepository<School, Integer> {
 }
