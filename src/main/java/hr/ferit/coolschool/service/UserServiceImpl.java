@@ -57,7 +57,8 @@ public class UserServiceImpl implements UserService {
                 user.getUserSchools().forEach(
                         us -> {
                             us.setUser(savedUser);
-                            us.setSchool(this.schoolRepository.findById(us.getSchool().getSchoolId()).get());
+                            us.setSchool(this.schoolRepository.findById(us.getSchool().getSchoolId())
+                                    .orElseThrow(() -> new ResourceNotFoundException("Tražena škola ne postoji")));
                             this.userSchoolRepository.save(us);
                         }
                 );

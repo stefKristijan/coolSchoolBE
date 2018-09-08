@@ -18,12 +18,12 @@ public class SchoolController {
 
     @Autowired
     private SchoolService schoolService;
-    
+
     @Autowired
     private SchoolRepository schoolRepository;
 
     @GetMapping
-    public ResponseEntity<List<School>> listSchools(){
+    public ResponseEntity<List<School>> listSchools() {
         return ResponseEntity.ok(this.schoolRepository.findAll());
     }
 
@@ -57,10 +57,10 @@ public class SchoolController {
 
     @GetMapping("{id}/users")
     public ResponseEntity<?> getUsersInSchool(
-            @PathVariable Integer id,
-            @RequestParam(value = "teachers", required = false) boolean teachersOnly,
-            @RequestParam(value = "students", required = false) boolean studentsOnly
-    ){
-        throw new UnsupportedOperationException("Metoda trenutno nije implementirana");
+            @PathVariable("id") Integer schoolId,
+            @RequestParam(value = "teachers", required = false, defaultValue = "false") boolean teachersOnly,
+            @RequestParam(value = "students", required = false, defaultValue = "false") boolean studentsOnly
+    ) {
+        return ResponseEntity.ok(this.schoolService.findAllUsersInSchool(schoolId, teachersOnly, studentsOnly));
     }
 }
