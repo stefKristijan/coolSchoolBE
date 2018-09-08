@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.Objects;
 import java.util.Optional;
 
 
@@ -76,6 +77,8 @@ public class UserServiceImpl implements UserService {
 
         user.setUserId(id);
         user.setPassword(persisted.getPassword());
+        if (!Objects.isNull(user.getUserSchools()) && user.getUserSchools().size() > 0)
+            user.getUserSchools().forEach(us -> us.setUser(user));
 
         this.userRepository.findByUsername(user.getUsername()).ifPresent(
                 u -> {
@@ -83,7 +86,8 @@ public class UserServiceImpl implements UserService {
                         throw new UserAlreadyExistsException("Korisnik s odabranim korisničkim imenom već postoji");
                 }
         );
-
+        this.userSchoolRepository.deleteAllByUserUserId(user.getUserId());
+        System.out.println("DELETED");
         return this.userRepository.save(user);
     }
 
