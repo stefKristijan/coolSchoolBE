@@ -15,6 +15,7 @@ public interface UserService extends UserDetailsService {
 
     /**
      * Checks if user exists and if it does, updates it and returns the updated user
+     * update() also updates the users list of schools (if sent empty - schools of user will be removed)
      *
      * @param id
      * @param user

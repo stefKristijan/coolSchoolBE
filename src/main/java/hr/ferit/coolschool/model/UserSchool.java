@@ -44,6 +44,28 @@ public class UserSchool implements Serializable {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        UserSchool that = (UserSchool) o;
+
+        if (userSchoolId != null ? !userSchoolId.equals(that.userSchoolId) : that.userSchoolId != null) return false;
+        if (!user.equals(that.user)) return false;
+        if (!school.equals(that.school)) return false;
+        return classNum != null ? classNum.equals(that.classNum) : that.classNum == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = userSchoolId != null ? userSchoolId.hashCode() : 0;
+        result = 31 * result + user.hashCode();
+        result = 31 * result + school.hashCode();
+        result = 31 * result + (classNum != null ? classNum.hashCode() : 0);
+        return result;
+    }
+
     public Long getUserSchoolId() {
         return userSchoolId;
     }

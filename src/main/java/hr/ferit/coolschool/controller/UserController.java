@@ -2,7 +2,6 @@ package hr.ferit.coolschool.controller;
 
 import hr.ferit.coolschool.exception.ResourceNotFoundException;
 import hr.ferit.coolschool.model.User;
-import hr.ferit.coolschool.model.UserSchool;
 import hr.ferit.coolschool.repository.UserRepository;
 import hr.ferit.coolschool.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -70,8 +68,9 @@ public class UserController {
         return this.userService.updatePassword(id, oldPassword, newPassword);
     }
 
+    //I think this is not needed because the user gets all schools on findById() method
     @GetMapping("{id}/schools")
-    public ResponseEntity<List<UserSchool>> getUserSchoolList(
+    public ResponseEntity<?> getUserSchoolList(
             @PathVariable Long id
     ){
         throw new UnsupportedOperationException("Nije još implementirano");
