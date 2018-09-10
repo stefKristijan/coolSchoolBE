@@ -5,7 +5,9 @@ import hr.ferit.coolschool.model.User;
 import hr.ferit.coolschool.repository.UserRepository;
 import hr.ferit.coolschool.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -23,7 +25,7 @@ public class UserController {
     private UserRepository userRepository;
 
     @GetMapping("")
-    public ResponseEntity<?> listUsers(){
+    public ResponseEntity<?> listUsers() {
         return ResponseEntity.ok(this.userRepository.findAll());
     }
 
@@ -72,8 +74,30 @@ public class UserController {
     @GetMapping("{id}/schools")
     public ResponseEntity<?> getUserSchoolList(
             @PathVariable Long id
-    ){
+    ) {
         throw new UnsupportedOperationException("Nije još implementirano");
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity deleteUser(
+            @PathVariable("id") Long userId
+    ) {
+        this.userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Traženi korisnik ne postoji"));
+
+        this.userRepository.deleteById(userId);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
+    @DeleteMapping("self")
+    public ResponseEntity deleteSelf(){
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User me = this.userRepository.findByUsername(username)
+                .orElseThrow(()->new ResourceNotFoundException("Ovaj korisnički račun ne postoji"));
+
+        this.userRepository.deleteById(me.getUserId());
+        SecurityContextHolder.clearContext();
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
 }

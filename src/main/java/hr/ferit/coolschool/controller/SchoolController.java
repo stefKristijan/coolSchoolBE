@@ -5,6 +5,7 @@ import hr.ferit.coolschool.model.School;
 import hr.ferit.coolschool.repository.SchoolRepository;
 import hr.ferit.coolschool.service.SchoolService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -62,5 +63,16 @@ public class SchoolController {
             @RequestParam(value = "students", required = false, defaultValue = "false") boolean studentsOnly
     ) {
         return ResponseEntity.ok(this.schoolService.findAllUsersInSchool(schoolId, teachersOnly, studentsOnly));
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity deleteSchool(
+            @PathVariable("id") Integer schoolId
+    ) {
+        this.schoolRepository.findById(schoolId)
+                .orElseThrow(() -> new ResourceNotFoundException("Tražena škola ne postoji"));
+
+        this.schoolRepository.deleteById(schoolId);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 }
