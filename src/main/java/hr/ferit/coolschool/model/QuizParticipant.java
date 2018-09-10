@@ -4,11 +4,13 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table(name = "quiz_participant")
+@Table(name = "quiz_participant", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"quiz_id", "user_id"})
+})
 public class QuizParticipant {
 
     @Id
-   @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long participantId;
     private Float sumPoints;
     //time in seconds
@@ -22,9 +24,9 @@ public class QuizParticipant {
     @JoinColumn(name = "quiz_id")
     private Quiz quiz;
 
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(
-            name="participant_answers",
+            name = "participant_answers",
             joinColumns = {@JoinColumn(name = "participant_id")},
             inverseJoinColumns = {@JoinColumn(name = "answer_id")}
     )

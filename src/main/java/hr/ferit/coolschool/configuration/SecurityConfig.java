@@ -51,6 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // @formatter:off
         http.authorizeRequests()
                 .antMatchers("/login", "/api/users/registration").permitAll()
+                .antMatchers("/api/quiz-results/**/submit").hasAuthority("ROLE_STUDENT")
                 .anyRequest().authenticated()
                 .and()
                     .exceptionHandling().accessDeniedHandler(accessDeniedHandler())
@@ -107,7 +108,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return (request, response, accessDeniedException) -> {
             response.setContentType("application/json");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getOutputStream().println("{ \"status\":\"401\",\n \"message\": \"Neovlašten pristup\" }");
+            response.getOutputStream().println("{ \"status\":\"401\",\n \"message\": \"Neovlasten pristup\" }");
         };
     }
 }

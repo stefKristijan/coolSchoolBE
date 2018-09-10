@@ -25,6 +25,7 @@ public class Answer {
     private Question question;
 
     @ManyToMany(mappedBy = "participantAnswers")
+    @JsonIgnore
     private Set<QuizParticipant> participants;
 
 

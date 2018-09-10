@@ -37,8 +37,7 @@ public class Quiz {
     @Min(value = 0, message = "Odaberite težinu između 0 i 10")
     @Max(value = 10, message = "Odaberite težinu izemđu 0 i 10")
     private int difficulty;
-    @Column(columnDefinition = "bit(1) DEFAULT 1")
-    private boolean enabled;
+    private boolean enabled = true;
 
     @OneToMany(mappedBy = "quiz", cascade = {CascadeType.ALL})
     @NotNull(message = "Unesite pitanja koja će se pojaviti u kvizu")
