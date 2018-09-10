@@ -87,7 +87,6 @@ public class UserServiceImpl implements UserService {
                 }
         );
         this.userSchoolRepository.deleteAllByUserUserId(user.getUserId());
-        System.out.println("DELETED");
         return this.userRepository.save(user);
     }
 

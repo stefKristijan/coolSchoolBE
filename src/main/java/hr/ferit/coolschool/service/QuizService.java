@@ -23,4 +23,13 @@ public interface QuizService {
      * @return the saved Quiz with all id's
      */
     Quiz save(Quiz quiz);
+
+    /**
+     * Checks if quiz with id is present in the database and updates it (updates questions and answers too)
+     *
+     * @param quiz - an existing quiz with all the questions and answers
+     * @param id - id of the quiz to update
+     * @return the updated Quiz
+     */
+    Quiz update(Quiz quiz, Long id);
 }

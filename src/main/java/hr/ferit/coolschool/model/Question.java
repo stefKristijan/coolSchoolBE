@@ -14,7 +14,7 @@ import java.util.Set;
 public class Question {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long questionId;
     @NotNull(message = "Unesite tekst pitanja")
     @NotBlank(message = "Unesite tekst pitanja")
@@ -26,7 +26,7 @@ public class Question {
     @JsonIgnore
     private Quiz quiz;
 
-    @OneToMany(mappedBy = "question")
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     @Size(min = 2, max=4, message = "Za svako pitanje mora postojati 2, 3 ili 4 odgovora od kojih je jedan točan")
     @Valid
     private Set<Answer> answers;

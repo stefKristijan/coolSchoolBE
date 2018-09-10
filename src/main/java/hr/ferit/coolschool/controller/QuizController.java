@@ -28,7 +28,7 @@ public class QuizController {
     @GetMapping
     public ResponseEntity<?> listQuizes(
             @RequestParam(value = "difficulty", required = false) Integer difficulty,
-            @RequestParam(value = "enabled", required = false) Boolean enabled,
+            @RequestParam(value = "enabled", defaultValue = "true", required = false) Boolean enabled,
             @RequestParam(value = "classNum", required = false) Integer classNum,
             @RequestParam(value = "schoolType", required = false) SchoolType schoolType,
             @RequestParam(value = "subject", required = false) Subject subject
@@ -55,5 +55,13 @@ public class QuizController {
     ){
         return ResponseEntity.ok(this.quizRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Ne postoji kviz koji ima id: " + id)));
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity<?> updateQuiz(
+            @PathVariable("id") Long id,
+            @RequestBody @Valid Quiz quiz
+    ){
+        return ResponseEntity.ok(this.quizService.update(quiz, id));
     }
 }

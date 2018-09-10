@@ -12,7 +12,7 @@ import java.util.Set;
 public class Answer {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long answerId;
     @NotNull(message = "Unesite tekst odgovora")
     @NotBlank(message = "Unesite tekst odgovora")

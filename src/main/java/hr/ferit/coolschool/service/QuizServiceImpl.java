@@ -1,6 +1,7 @@
 package hr.ferit.coolschool.service;
 
 import hr.ferit.coolschool.exception.QuizException;
+import hr.ferit.coolschool.exception.ResourceNotFoundException;
 import hr.ferit.coolschool.model.Answer;
 import hr.ferit.coolschool.model.Question;
 import hr.ferit.coolschool.model.Quiz;
@@ -76,6 +77,34 @@ public class QuizServiceImpl implements QuizService {
             throw new QuizException("Maksimalan broj bodova i suma bodova po odgovoru se ne poklapaju");
         }
 
+        quiz.getQuestions().forEach(q-> {
+            q.setQuiz(quiz);
+            q.getAnswers().forEach(a -> a.setQuestion(q));
+        });
+       return this.quizRepository.save(quiz);
+    }
+
+    @Override
+    public Quiz update(Quiz quiz, Long id) {
+        Quiz persistedQuiz = this.quizRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Ne postoji traženi kviz"));
+
+        quiz.setQuizId(id);
+        if (checkPointsAndAnswers(quiz.getQuestions()) != quiz.getMaxPoints()) {
+            throw new QuizException("Maksimalan broj bodova i suma bodova po odgovoru se ne poklapaju");
+        }
+
+        persistedQuiz.getQuestions()
+                .forEach(q -> this.answerRepository.deleteAllByQuestionId(q.getQuestionId()));
+        this.questionRepository.deleteAllByQuizId(id);
+        quiz.getQuestions().forEach(q-> {
+            q.setQuiz(quiz);
+            q.getAnswers().forEach(a -> a.setQuestion(q));
+        });
+        return this.quizRepository.save(quiz);
+    }
+
+    private Quiz saveAndReturnQuiz(Quiz quiz) {
         Quiz savedQuiz = this.quizRepository.save(quiz);
         quiz.getQuestions().forEach(q -> {
             q.setQuiz(savedQuiz);
