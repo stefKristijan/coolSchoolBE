@@ -8,6 +8,7 @@ import hr.ferit.coolschool.model.filter.QuizFilter;
 import hr.ferit.coolschool.repository.QuizRepository;
 import hr.ferit.coolschool.service.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,7 +53,7 @@ public class QuizController {
     @GetMapping("{id}")
     public ResponseEntity<?> quizById(
             @PathVariable("id") Long id
-    ){
+    ) {
         return ResponseEntity.ok(this.quizRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Ne postoji kviz koji ima id: " + id)));
     }
@@ -61,7 +62,17 @@ public class QuizController {
     public ResponseEntity<?> updateQuiz(
             @PathVariable("id") Long id,
             @RequestBody @Valid Quiz quiz
-    ){
+    ) {
         return ResponseEntity.ok(this.quizService.update(quiz, id));
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity deleteQuiz(
+            @PathVariable("id") Long quizId
+    ) {
+        this.quizRepository.findById(quizId)
+                .orElseThrow(() -> new ResourceNotFoundException("Ne postoji traženi kviz"));
+        this.quizRepository.deleteById(quizId);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 }
