@@ -11,8 +11,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -20,7 +18,6 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Configuration
@@ -48,7 +45,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        // @formatter:off
         http.authorizeRequests()
                 .antMatchers("/login", "/api/users/registration").permitAll()
                 .antMatchers("/api/quiz-results/**/submit").hasAuthority("ROLE_STUDENT")
@@ -63,7 +59,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .loginProcessingUrl("/login")
                 .successHandler(new SavedRequestAwareAuthenticationSuccessHandler() {{
                         setRedirectStrategy((request, response, url) -> {
-                        // Do not redirect after login
                         });
                     }})
                     .failureHandler((httpServletRequest, httpServletResponse, e) -> {
@@ -77,21 +72,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .logout()
                     .logoutUrl("/logout")
                     .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK));
-//        http.sessionManagement().sessionAuthenticationStrategy(this::onAuthentication)
-//                .and().csrf().disable()
-//                .exceptionHandling()
-//                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
-        // @formatter:on
-    }
-
-    private void onAuthentication(Authentication authentication, HttpServletRequest request, HttpServletResponse response) {
-        if (authentication.isAuthenticated()) {
-
-            if (userService.loadUserByUsername(authentication.getName()) == null) {
-                throw new UsernameNotFoundException("Korisnik s korisničkim imenom: "
-                        + authentication.getName() + " ne postoji");
-            }
-        }
     }
 
     @Bean
