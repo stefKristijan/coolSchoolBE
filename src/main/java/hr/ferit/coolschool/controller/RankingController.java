@@ -1,5 +1,6 @@
 package hr.ferit.coolschool.controller;
 
+import hr.ferit.coolschool.model.SchoolType;
 import hr.ferit.coolschool.model.Subject;
 import hr.ferit.coolschool.model.filter.RankingFilter;
 import hr.ferit.coolschool.service.RankingService;
@@ -9,9 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Objects;
-import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("api/rankings")
@@ -25,15 +23,15 @@ public class RankingController {
     public ResponseEntity<?> studentRanking(
             @RequestParam(value = "quizId", required = false) Long quizId,
             @RequestParam(value = "subject", required = false) Subject subject,
-            @RequestParam(value = "classNum", required = false) Integer classNum,
             @RequestParam(value = "schoolId", required = false) Integer schoolId,
             @RequestParam(value = "city", required = false) String city,
-            @RequestParam(value = "state", required = false) String state
-    ) {
-        if (Stream.of(quizId, subject, classNum, schoolId, subject, city, state).allMatch(Objects::isNull)) {
-            return ResponseEntity.ok(this.rankingService.findWithoutFilter());
-        }
-        RankingFilter rankingFilter;
-        return null;
+            @RequestParam(value = "state", required = false) String state,
+            @RequestParam(value = "schoolType", required = false) SchoolType schoolType
+            ) {
+        RankingFilter rankingFilter = new RankingFilter()
+                .byQuiz(quizId).bySubject(subject).bySchool(schoolId)
+                .byCity(city).byState(state).bySchoolType(schoolType);
+
+        return ResponseEntity.ok(this.rankingService.findByFilter(rankingFilter));
     }
 }

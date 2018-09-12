@@ -16,8 +16,14 @@ import javax.persistence.*;
         })
 @NamedNativeQuery(name = "findRankings",
         query = "SELECT u.username username, sum(qp.sum_points) points, us.class_num classNum, s.name schoolName " +
-                "FROM users u, quiz_participant qp, user_school us, schools s " +
-                "WHERE qp.user_id = u.user_id AND us.user_id = u.user_id AND s.school_id = us.school_id " +
+                "FROM users u, quiz_participant qp, user_school us, schools s, quizzes q " +
+                "WHERE qp.user_id = u.user_id AND us.user_id = u.user_id AND q.quiz_id = qp.quiz_id AND s.school_id = us.school_id " +
+                "AND q.quiz_id = COALESCE(:quizId,q.quiz_id) " +
+                "AND q.subject = COALESCE(:subject, q.subject) " +
+                "AND s.school_id = COALESCE(:schoolId, s.school_id) " +
+                "AND s.city = COALESCE(:city, s.city) " +
+                "AND s.state = COALESCE(:state, s.state) " +
+                "AND s.type = COALESCE(:schoolType, s.type) " +
                 "GROUP BY u.username",
         resultClass = Rank.class,
         resultSetMapping = "findAllRankings"

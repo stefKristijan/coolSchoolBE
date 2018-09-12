@@ -1,5 +1,6 @@
 package hr.ferit.coolschool.model.filter;
 
+import hr.ferit.coolschool.model.SchoolType;
 import hr.ferit.coolschool.model.Subject;
 
 import java.util.Objects;
@@ -8,7 +9,7 @@ public class RankingFilter {
 
     private Long quizId;
     private Subject subject;
-    private Integer classNum;
+    private SchoolType schoolType;
     private Integer schoolId;
     private String city;
     private String state;
@@ -31,9 +32,9 @@ public class RankingFilter {
         return this;
     }
 
-    public RankingFilter byClassNum(Integer classNum) {
-        if (!Objects.isNull(classNum))
-            this.classNum = classNum;
+    public RankingFilter bySchoolType(SchoolType schoolType) {
+        if (!Objects.isNull(schoolType))
+            this.schoolType = schoolType;
         return this;
     }
 
@@ -44,7 +45,7 @@ public class RankingFilter {
     }
 
     public RankingFilter byState(String state) {
-        if (!Objects.isNull(quizId) && !state.isEmpty())
+        if (!Objects.isNull(state) && !state.isEmpty())
             this.state = state;
         return this;
     }
@@ -53,12 +54,22 @@ public class RankingFilter {
         return quizId;
     }
 
-    public Subject getSubject() {
-        return subject;
+    public Integer getSubject() {
+        for(int i=0; i<Subject.values().length; i++){
+            if(Subject.values()[i].equals(subject)){
+                return i;
+            }
+        }
+        return null;
     }
 
-    public Integer getClassNum() {
-        return classNum;
+    public Integer getSchoolType() {
+        for(int i=0; i<SchoolType.values().length; i++){
+            if(SchoolType.values()[i].equals(schoolType)){
+                return i;
+            }
+        }
+        return null;
     }
 
     public Integer getSchoolId() {
