@@ -24,11 +24,19 @@ public class UserSchool implements Serializable {
     private School school;
 
     private Integer classNum;
+    private Subject subject;
 
     public UserSchool(User user, School school, Integer classNum) {
         this.user = user;
         this.school = school;
         this.classNum = classNum;
+    }
+
+    public UserSchool(User user, School school, Integer classNum, Subject subject) {
+        this.user = user;
+        this.school = school;
+        this.classNum = classNum;
+        this.subject = subject;
     }
 
     public UserSchool() {
@@ -41,6 +49,7 @@ public class UserSchool implements Serializable {
                 ", user=" + user +
                 ", school=" + school +
                 ", classNum=" + classNum +
+                ", subject=" + subject +
                 '}';
     }
 
@@ -75,5 +84,13 @@ public class UserSchool implements Serializable {
 
     public void setClassNum(Integer classNum) {
         this.classNum = classNum;
+    }
+
+    public Subject getSubject() {
+        return subject;
+    }
+
+    public void setSubject(Subject subject) {
+        this.subject = subject;
     }
 }

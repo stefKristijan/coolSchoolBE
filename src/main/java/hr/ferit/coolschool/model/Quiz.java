@@ -19,6 +19,9 @@ public class Quiz {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long quizId;
+    @NotNull
+    private String name;
+    private String description;
     @CreationTimestamp
     private LocalDateTime creationTime;
     private LocalDateTime startTime;
@@ -78,6 +81,8 @@ public class Quiz {
                 ", enabled=" + enabled +
                 ", questions=" + questions +
                 ", quizParticipants=" + quizParticipants +
+                ", name=" + name +
+                ", description=" + description +
                 '}';
     }
 
@@ -97,6 +102,8 @@ public class Quiz {
         if (classNum != quiz.classNum) return false;
         if (schoolType != quiz.schoolType) return false;
         if (subject != quiz.subject) return false;
+        if (name != quiz.name) return false;
+        if (description != quiz.description) return false;
         return maxPoints.equals(quiz.maxPoints);
     }
 
@@ -109,10 +116,32 @@ public class Quiz {
         result = 31 * result + classNum;
         result = 31 * result + schoolType.hashCode();
         result = 31 * result + subject.hashCode();
+        result = 31 * result + name.hashCode();
+        result = 31 * result + description.hashCode();
         result = 31 * result + maxPoints.hashCode();
         result = 31 * result + difficulty;
         result = 31 * result + (enabled ? 1 : 0);
         return result;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setClassNum(int classNum) {
+        this.classNum = classNum;
     }
 
     public Long getQuizId() {

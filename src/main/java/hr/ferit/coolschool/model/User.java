@@ -2,14 +2,12 @@ package hr.ferit.coolschool.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -33,8 +31,6 @@ public class User {
     @Email(message = "Unesite e-mail adresu pravilnog formata")
     @NotNull(message = "Unesite e-mail adresu")
     private String email;
-    @DateTimeFormat(pattern = "dd.MM.yyyy.")
-    private Date dob;
     @NotBlank(message = "Unesite vaše ime")
     @NotNull(message = "Unesite vaše ime")
     private String firstName;
@@ -50,11 +46,10 @@ public class User {
     @JsonIgnore
     private Set<QuizParticipant> participants;
 
-    public User(String username, String password, String email, Date dob, String firstName, String lastName, Role role) {
+    public User(String username, String password, String email, String firstName, String lastName, Role role) {
         this.username = username;
         this.password = password;
         this.email = email;
-        this.dob = dob;
         this.firstName = firstName;
         this.lastName = lastName;
         this.role = role;
@@ -70,7 +65,6 @@ public class User {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
-                ", dob='" + dob + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", role=" + role +
@@ -90,7 +84,6 @@ public class User {
         if (!username.equals(user.username)) return false;
         if (password != null ? !password.equals(user.password) : user.password != null) return false;
         if (email != null ? !email.equals(user.email) : user.email != null) return false;
-        if (dob != null ? !dob.equals(user.dob) : user.dob != null) return false;
         if (firstName != null ? !firstName.equals(user.firstName) : user.firstName != null) return false;
         if (lastName != null ? !lastName.equals(user.lastName) : user.lastName != null) return false;
         return role == user.role;
@@ -102,7 +95,6 @@ public class User {
         result = 31 * result + username.hashCode();
         result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
-        result = 31 * result + (dob != null ? dob.hashCode() : 0);
         result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
         result = 31 * result + role.hashCode();
@@ -155,14 +147,6 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public Date getDob() {
-        return dob;
-    }
-
-    public void setDob(Date dob) {
-        this.dob = dob;
     }
 
     public String getFirstName() {
