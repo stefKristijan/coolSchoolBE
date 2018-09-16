@@ -24,7 +24,7 @@ import javax.persistence.*;
                 "AND s.city = COALESCE(:city, s.city) " +
                 "AND s.state = COALESCE(:state, s.state) " +
                 "AND s.type = COALESCE(:schoolType, s.type) " +
-                "GROUP BY u.username",
+                "GROUP BY u.username ORDER BY points",
         resultClass = Rank.class,
         resultSetMapping = "findAllRankings"
 )

@@ -1,5 +1,6 @@
 package hr.ferit.coolschool.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -9,7 +10,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -23,9 +24,12 @@ public class Quiz {
     private String name;
     private String description;
     @CreationTimestamp
-    private LocalDateTime creationTime;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+    @JsonFormat(pattern = "dd.MM.yyyy.")
+    private Date creationTime;
+    @JsonFormat(pattern = "dd.MM.yyyy.")
+    private Date startTime;
+    @JsonFormat(pattern = "dd.MM.yyyy.")
+    private Date endTime;
     @Min(value = 1, message = "Unesite razred/godinu za koji/u je namijenjen kviz (od 1 do 8)")
     @Max(value = 9, message = "Unesite razred/godinu za koji/u je namijenjen kviz (od 1 do 8)")
     private int classNum;
@@ -51,7 +55,7 @@ public class Quiz {
     @OneToMany(mappedBy = "quiz", cascade = {CascadeType.ALL})
     private Set<QuizParticipant> quizParticipants;
 
-    public Quiz(LocalDateTime creationTime, LocalDateTime startTime, LocalDateTime endTime, Integer classNum, SchoolType schoolType, Subject subject, Float maxPoints, int difficulty, boolean enabled) {
+    public Quiz(Date creationTime, Date startTime, Date endTime, Integer classNum, SchoolType schoolType, Subject subject, Float maxPoints, int difficulty, boolean enabled) {
         this.creationTime = creationTime;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -152,27 +156,27 @@ public class Quiz {
         this.quizId = quizId;
     }
 
-    public LocalDateTime getCreationTime() {
+    public Date getCreationTime() {
         return creationTime;
     }
 
-    public void setCreationTime(LocalDateTime creationTime) {
+    public void setCreationTime(Date creationTime) {
         this.creationTime = creationTime;
     }
 
-    public LocalDateTime getStartTime() {
+    public Date getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(LocalDateTime startTime) {
+    public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }
 
-    public LocalDateTime getEndTime() {
+    public Date getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(LocalDateTime endTime) {
+    public void setEndTime(Date endTime) {
         this.endTime = endTime;
     }
 

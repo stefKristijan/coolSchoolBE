@@ -37,15 +37,15 @@ public class QuizServiceImpl implements QuizService {
     @Override
     public List<Quiz> findAllByFilter(QuizFilter quizFilter) {
         if (Objects.isNull(quizFilter)) {
-            System.out.println("FindAll()");
             return this.quizRepository.findAll();
         }
         List<QuizSpecification> specifications = new ArrayList<>();
         if (!Objects.isNull(quizFilter.getEnabled())) {
-            specifications.add(new QuizSpecification(
-                    new SearchCriteria("enabled", ":", quizFilter.getEnabled())
-            ));
-            System.out.println("Added enabled spec" + specifications);
+            if(quizFilter.getEnabled()){
+                specifications.add(new QuizSpecification(
+                        new SearchCriteria("enabled", ":", quizFilter.getEnabled())
+                ));
+            }
         }
         if (!Objects.isNull(quizFilter.getClassNum())) {
             specifications.add(new QuizSpecification(
@@ -56,7 +56,6 @@ public class QuizServiceImpl implements QuizService {
             specifications.add(new QuizSpecification(
                     new SearchCriteria("difficulty", ":", quizFilter.getDifficulty())
             ));
-            System.out.println("Added difficulty spec" + specifications);
         }
         if (!Objects.isNull(quizFilter.getSchoolType())) {
             specifications.add(new QuizSpecification(
